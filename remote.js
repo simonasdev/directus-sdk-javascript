@@ -30,7 +30,7 @@ class RemoteInstance {
     const headers = this._requestHeaders;
     
     if (this.accessToken && this.accessTokenType === 'parameter') {
-      params.accessToken = this.accessToken;
+      params.access_token = this.accessToken;
     }
 
     return new Promise((resolve, reject) => {
