@@ -29,7 +29,7 @@ class RemoteInstance {
   _get(endpoint, params = {}) {
     const headers = this._requestHeaders;
     
-    if (this.accessTokenType === 'parameter') {
+    if (this.accessToken && this.accessTokenType === 'parameter') {
       params.accessToken = this.accessToken;
     }
 
@@ -53,7 +53,7 @@ class RemoteInstance {
   _post(endpoint, data = {}) {
     const headers = this._requestHeaders;
         
-    if (this.accessTokenType === 'parameter') {
+    if (this.accessToken && this.accessTokenType === 'parameter') {
       endpoint = `${endpoint}?access_token=${this.accessToken}`;
     }
 
@@ -73,7 +73,7 @@ class RemoteInstance {
   _put(endpoint, data = {}) {
     const headers = this._requestHeaders;
     
-    if (this.accessTokenType === 'parameter') {
+    if (this.accessToken && this.accessTokenType === 'parameter') {
       endpoint = `${endpoint}?access_token=${this.accessToken}`;
     }
 
@@ -93,7 +93,7 @@ class RemoteInstance {
   _delete(endpoint, data = {}) {
     const headers = this._requestHeaders;
     
-    if (this.accessTokenType === 'parameter') {
+    if (this.accessToken && this.accessTokenType === 'parameter') {
       endpoint = `${endpoint}?access_token=${this.accessToken}`;
     }
 
