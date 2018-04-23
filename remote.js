@@ -3,8 +3,9 @@ const qs = require('qs');
 
 class RemoteInstance {
   constructor(options) {
-    const {accessToken, url, headers} = options;
+    const {accessToken, url, headers, accessTokenType} = options;
 
+    this.accessTokenType = accessTokenType || 'header';
     this.accessToken = accessToken;
     this.headers = headers || {};
 
@@ -18,7 +19,7 @@ class RemoteInstance {
   get _requestHeaders() {
     const headers = this.headers || {};
 
-    if (this.accessToken) {
+    if (this.accessToken && this.accessTokenType === 'header') {
       headers.Authorization = 'Bearer ' + this.accessToken;
     }
 
@@ -27,6 +28,10 @@ class RemoteInstance {
 
   _get(endpoint, params = {}) {
     const headers = this._requestHeaders;
+    
+    if (this.accessTokenType === 'parameter') {
+      params.accessToken = this.accessToken;
+    }
 
     return new Promise((resolve, reject) => {
       axios.get(this.url + endpoint, {
@@ -47,6 +52,10 @@ class RemoteInstance {
 
   _post(endpoint, data = {}) {
     const headers = this._requestHeaders;
+        
+    if (this.accessTokenType === 'parameter') {
+      endpoint = `${endpoint}?access_token=${this.accessToken}`;
+    }
 
     return new Promise((resolve, reject) => {
       axios.post(this.url + endpoint, data, {headers})
@@ -63,6 +72,10 @@ class RemoteInstance {
 
   _put(endpoint, data = {}) {
     const headers = this._requestHeaders;
+    
+    if (this.accessTokenType === 'parameter') {
+      endpoint = `${endpoint}?access_token=${this.accessToken}`;
+    }
 
     return new Promise((resolve, reject) => {
       axios.put(this.url + endpoint, data, {headers})
@@ -79,6 +92,10 @@ class RemoteInstance {
 
   _delete(endpoint, data = {}) {
     const headers = this._requestHeaders;
+    
+    if (this.accessTokenType === 'parameter') {
+      endpoint = `${endpoint}?access_token=${this.accessToken}`;
+    }
 
     return new Promise((resolve, reject) => {
       axios.delete(this.url + endpoint, {headers, data})
