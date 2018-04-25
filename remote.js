@@ -28,10 +28,8 @@ class RemoteInstance {
 
   _get(endpoint, params = {}) {
     const headers = this._requestHeaders;
-    
-    if (this.accessToken && this.accessTokenType === 'parameter') {
-      params.access_token = this.accessToken;
-    }
+
+    setAccessTokenParam(params);
 
     return new Promise((resolve, reject) => {
       axios.get(this.url + endpoint, {
@@ -50,15 +48,13 @@ class RemoteInstance {
     });
   }
 
-  _post(endpoint, data = {}) {
+  _post(endpoint, data = {}, params = {}) {
     const headers = this._requestHeaders;
-        
-    if (this.accessToken && this.accessTokenType === 'parameter') {
-      endpoint = `${endpoint}?access_token=${this.accessToken}`;
-    }
+
+    setAccessTokenParam(params);
 
     return new Promise((resolve, reject) => {
-      axios.post(this.url + endpoint, data, {headers})
+      axios.post(this.url + endpoint, data, {headers, params})
         .then(res => resolve(res.data))
         .catch(err => {
           if (err.response && err.response.data) {
@@ -70,15 +66,13 @@ class RemoteInstance {
     });
   }
 
-  _put(endpoint, data = {}) {
+  _put(endpoint, data = {}, params = {}) {
     const headers = this._requestHeaders;
-    
-    if (this.accessToken && this.accessTokenType === 'parameter') {
-      endpoint = `${endpoint}?access_token=${this.accessToken}`;
-    }
+
+    setAccessTokenParam(params);
 
     return new Promise((resolve, reject) => {
-      axios.put(this.url + endpoint, data, {headers})
+      axios.put(this.url + endpoint, data, {headers, params})
         .then(res => resolve(res.data))
         .catch(err => {
           if (err.response && err.response.data) {
@@ -90,15 +84,13 @@ class RemoteInstance {
     });
   }
 
-  _delete(endpoint, data = {}) {
+  _delete(endpoint, data = {}, params = {}) {
     const headers = this._requestHeaders;
-    
-    if (this.accessToken && this.accessTokenType === 'parameter') {
-      endpoint = `${endpoint}?access_token=${this.accessToken}`;
-    }
+
+    setAccessTokenParam(params);
 
     return new Promise((resolve, reject) => {
-      axios.delete(this.url + endpoint, {headers, data})
+      axios.delete(this.url + endpoint, {headers, data, params})
         .then(res => resolve(res.data))
         .catch(err => {
           if (err.response && err.response.data) {
@@ -128,8 +120,8 @@ class RemoteInstance {
 
   // Items
   // ----------------------------------------------------------------------------------
-  createItem(table = requiredParam('table'), data = {}) {
-    return this._post(`tables/${table}/rows`, data);
+  createItem(table = requiredParam('table'), data = {}, params = {}) {
+    return this._post(`tables/${table}/rows`, data, params);
   }
 
   getItems(table = requiredParam('table'), params = {}) {
@@ -140,12 +132,12 @@ class RemoteInstance {
     return this._get(`tables/${table}/rows/${id}`, params);
   }
 
-  updateItem(table = requiredParam('table'), id = requiredParam('id'), data = requiredParam('data')) {
-    return this._put(`tables/${table}/rows/${id}`, data);
+  updateItem(table = requiredParam('table'), id = requiredParam('id'), data = requiredParam('data'), params = {}) {
+    return this._put(`tables/${table}/rows/${id}`, data, params);
   }
 
-  deleteItem(table = requiredParam('table'), id = requiredParam('id')) {
-    return this._delete(`tables/${table}/rows/${id}`);
+  deleteItem(table = requiredParam('table'), id = requiredParam('id'), params = {}) {
+    return this._delete(`tables/${table}/rows/${id}`, {}, params);
   }
 
   createBulk(table = requiredParam('table'), data = requiredParam('data')) {
@@ -287,7 +279,7 @@ class RemoteInstance {
   getMessage(id = requiredParam('id')) {
     return this._get(`messages/rows/${id}`);
   }
-  
+
   sendMessage(data = requiredParam('data')) {
     return this._post('messages/rows/', data);
   }
@@ -343,7 +335,7 @@ class RemoteInstance {
   getUser(id = requiredParam('id')) {
     return this._get(`users/${id}`);
   }
-  
+
   getMe() {
     return this._get(`users/me`);
   }
@@ -379,6 +371,12 @@ class RemoteInstance {
   // ----------------------------------------------------------------------------------
   getRandom(params = {}) {
     return this._post('random', params);
+  }
+
+  setAccessTokenParam (params) {
+    if (this.accessToken && this.accessTokenType === 'parameter') {
+      params.access_token = this.accessToken;
+    }
   }
 }
 
