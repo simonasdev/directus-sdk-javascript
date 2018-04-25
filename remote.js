@@ -29,7 +29,7 @@ class RemoteInstance {
   _get(endpoint, params = {}) {
     const headers = this._requestHeaders;
 
-    setAccessTokenParam(params);
+    this.setAccessTokenParam(params);
 
     return new Promise((resolve, reject) => {
       axios.get(this.url + endpoint, {
@@ -51,7 +51,7 @@ class RemoteInstance {
   _post(endpoint, data = {}, params = {}) {
     const headers = this._requestHeaders;
 
-    setAccessTokenParam(params);
+    this.setAccessTokenParam(params);
 
     return new Promise((resolve, reject) => {
       axios.post(this.url + endpoint, data, {headers, params})
@@ -69,7 +69,7 @@ class RemoteInstance {
   _put(endpoint, data = {}, params = {}) {
     const headers = this._requestHeaders;
 
-    setAccessTokenParam(params);
+    this.setAccessTokenParam(params);
 
     return new Promise((resolve, reject) => {
       axios.put(this.url + endpoint, data, {headers, params})
@@ -87,7 +87,7 @@ class RemoteInstance {
   _delete(endpoint, data = {}, params = {}) {
     const headers = this._requestHeaders;
 
-    setAccessTokenParam(params);
+    this.setAccessTokenParam(params);
 
     return new Promise((resolve, reject) => {
       axios.delete(this.url + endpoint, {headers, data, params})
