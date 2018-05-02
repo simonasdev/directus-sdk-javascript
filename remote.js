@@ -83,7 +83,7 @@ class RemoteInstance {
     });
   }
 
-  _delete(endpoint, data = {}, isAPI = false, params) {
+  _delete(endpoint, data = {}, isAPI = false, params = {}) {
     const headers = this._requestHeaders;
     const url = isAPI ? this.api : this.url;
 
