@@ -16,7 +16,6 @@ class RemoteInstance {
 
     // TEMP FIX FOR BACKWARD COMPATIBILTY
     let _url = url.replace('/api/1.1', '');
-
     this.base = _url.replace(/\/+$/, '');
     this.api = this.base + '/api/';
     this.url = this.api + this.version + '/';
@@ -69,7 +68,7 @@ class RemoteInstance {
         .catch(err => this._onCaughtError(resolve, reject, err));
     });
   }
-  
+
   _put(endpoint, data = {}, isAPI = false, params = {}) {
     const headers = this._requestHeaders;
     const url = isAPI ? this.api : this.url;
@@ -114,24 +113,24 @@ class RemoteInstance {
 
   // Items
   // ----------------------------------------------------------------------------------
-  createItem(table = requiredParam('table'), data = {}, params = {}) {
-    return this._post(`tables/${table}/rows`, data, params);
+  createItem(table = requiredParam('table'), data = {}, params = {}, isAPI = false) {
+    return this._post(`tables/${table}/rows`, data, isAPI, params);
   }
 
-  getItems(table = requiredParam('table'), params = {}) {
-    return this._get(`tables/${table}/rows`, params);
+  getItems(table = requiredParam('table'), params = {}, isAPI = false) {
+    return this._get(`tables/${table}/rows`, params, isAPI);
   }
 
-  getItem(table = requiredParam('table'), id = requiredParam('id'), params = {}) {
-    return this._get(`tables/${table}/rows/${id}`, params);
+  getItem(table = requiredParam('table'), id = requiredParam('id'), params = {}, isAPI = false) {
+    return this._get(`tables/${table}/rows/${id}`, params, isAPI);
   }
 
-  updateItem(table = requiredParam('table'), id = requiredParam('id'), data = requiredParam('data'), params = {}) {
-    return this._put(`tables/${table}/rows/${id}`, data, params);
+  updateItem(table = requiredParam('table'), id = requiredParam('id'), data = requiredParam('data'), params = {}, isAPI = false) {
+    return this._put(`tables/${table}/rows/${id}`, data, isAPI, params);
   }
 
-  deleteItem(table = requiredParam('table'), id = requiredParam('id'), params = {}) {
-    return this._delete(`tables/${table}/rows/${id}`, {}, params);
+  deleteItem(table = requiredParam('table'), id = requiredParam('id'), params = {}, isAPI = false) {
+    return this._delete(`tables/${table}/rows/${id}`, {}, isAPI, params);
   }
 
   createBulk(table = requiredParam('table'), data = requiredParam('data')) {
